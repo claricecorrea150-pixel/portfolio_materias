@@ -1,0 +1,77 @@
+
+<h1>Meu Portfólio</h1>
+
+<input type="text" placeholder="nome" id="nome">
+<input type="text" placeholder="professor" id="professor">
+<input type="text" placeholder="cargaHoraria" id="cargaHoraria">
+<input type="text" placeholder="nota" id="nota">
+<input type="text" placeholder="aprendizado" id="aprendizado">
+<input type="text" placeholder="imagem" id="imagem">
+
+<button onclick="cadastrar()">Cadastrar</button>
+<button onclick="buscar()">Buscar</button>
+
+<p id="contador">Total de matérias: 0</p>
+
+<div id="lista"></div>
+
+<script>
+    async function cadastrar () {
+        const imagem = document.getElementById('imagem').value
+        const nome = document.getElementById('nome').value
+        const professor = document.getElementById('professor').value
+        const aprendizado = document.getElementById('aprendizado').value
+        const cargaHoraria = Number(document.getElementById('cargaHoraria').value)
+        const nota = Number(document.getElementById('nota').value)
+
+        const materia = {
+            imagem, nome, professor, aprendizado, cargaHoraria, nota
+        }
+
+        const resposta = await fetch('http://localhost:3000/materias', {
+            method: 'POST',
+            body: JSON.stringify(materia),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (!resposta.ok) {
+            alert(await resposta.text())
+            return
+        }
+
+        document.getElementById('nome').value = ''
+        document.getElementById('professor').value = ''
+        document.getElementById('cargaHoraria').value = ''
+        document.getElementById('nota').value = ''
+        document.getElementById('aprendizado').value = ''
+        document.getElementById('imagem').value = ''
+
+        buscar()
+    }
+
+async function buscar() {
+    const resposta = await fetch('http://localhost:3000/materias')
+    const materias = await resposta.json()
+
+    const lista = document.getElementById('lista')
+    lista.innerHTML = ''
+
+    document.getElementById('contador').textContent =
+        `Total de matérias: ${materias.length}`
+
+    materias.forEach(materia => {
+        lista.innerHTML += `
+        <br>
+        <img width="200px" src="${materia.imagem}"> <br>
+        matéria: ${materia.nome} <br>
+        professor: ${materia.professor} <br>
+        carga horária: ${materia.cargaHoraria} horas <br>
+        nota: ${materia.nota} <br>
+        o que aprendi: ${materia.aprendizado} <br>`
+    })
+}
+
+buscar()
+</script>

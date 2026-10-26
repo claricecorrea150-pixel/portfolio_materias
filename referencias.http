@@ -1,0 +1,29 @@
+### Teste de health check
+GET http://localhost:3000/
+
+###
+
+GET http://localhost:3000/materias
+
+###
+
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "nome": "Programação Web",
+    "professor": "Marcos",
+    "cargaHoraria": 80,
+    "nota": 9.5,
+    "aprendizado": "Criei minha primeira API com Express",
+    "imagem": "https://link-de-uma-imagem.com/foto.jpg"
+}
+
+###
+
+POST http://localhost:3000/materias
+Content-Type: application/json
+
+{
+    "nome": "Matemática"
+}
